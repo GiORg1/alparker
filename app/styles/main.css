@@ -39,7 +39,7 @@ html, body {
 
 #map {
   height: 90%;
-  width: 85%;
+  width: 100%;
   position: relative;
   float:right;
 }
