@@ -1,21 +1,24 @@
-// server.js
-const express = require('express');
+var express = require('express');
 const MongoClient = require('mongodb').MongoClient;
-const bodyParser = require('body-parser');
-const db = require('./config/db');
+var app = express();
 
-const app = express();
+// set the port of our application
+// process.env.PORT lets the port be set by Heroku
+var port = process.env.PORT || 8080;
 
-const port = 8000;
+// set the view engine to ejs
+app.set('view engine', 'ejs');
 
-app.use('/webapp', express.static(__dirname + '/webapp')); //To load Web App
-app.use(bodyParser.urlencoded({ extended: true }));
+// make express look in the public directory for assets (css/js/img)
+app.use(express.static(__dirname + '/public'));
 
-MongoClient.connect(db.url, (err, database) => {
-  if (err) return console.log(err)
-  else console.log('Database connection estabilished');
-  require('./app/routes')(app, database);
-  app.listen(process.env.PORT || port , () => {
-    console.log('We are live on ' + port);
-  });
+// set the home page route
+app.get('/', function(req, res) {
+
+    // ejs render automatically looks in the views folder
+    res.render('index');
+});
+
+app.listen(port, function() {
+    console.log('Our app is running on http://localhost:' + port);
 });

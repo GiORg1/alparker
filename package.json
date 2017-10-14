@@ -2,19 +2,13 @@
   "name": "alparker",
   "version": "1.0.0",
   "description": "Alparker - HackUPC2017",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "start": "node server.js"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.17.2",
-    "express": "^4.15.3",
+    "ejs": "~1.0.0",
     "mongodb": "^2.2.30",
-    "request": "^2.83.0"
-  },
-  "devDependencies": {
-    "nodemon": "^1.12.1"
+    "express": "~4.9.8"
   }
 }
