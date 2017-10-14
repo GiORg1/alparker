@@ -4,73 +4,9 @@
   <title>AlParker</title>
   <meta name="viewport" content="initial-scale=1.0">
   <meta charset="utf-8">
-  <style>
-    /* Always set the map height explicitly to define the size of the div
-     * element that contains the map. */
+  <link rel="stylesheet" type="text/css" href="styles/main.css">
+  <script type="text/javascript" src = "scripts/main.js"></script>
 
-    /* Optional: Makes the sample page fill the window. */
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0%;
-    }
-
-    /*Nav menu CSS*/
-    .topnav {
-      background-color: #f7f7f5;
-      overflow: hidden;
-
-    }
-    .topnav a {
-      float: left;
-      display: block;
-      text-align: center;
-      padding: 14px 16px;
-      text-decoration: none;
-      font: bold 15px Comfortaa ;
-      color: #778899;
-    }
-    .topnav a:hover {
-      background-color: #ddd;
-      color: black;
-    }
-
-    .topnav a:active {
-      background-color: #a29686;
-      color: white;
-    }
-
-    /*Main body CSS*/
-
-    #mainbody {
-      position: relative;
-      height: 100%;
-    }
-
-    #map {
-      height: 90%;
-      width: 85%;
-      position: relative;
-      float:right;
-    }
-
-    .sidebar{
-      position: relative;
-      float:left;
-      width: 14%;
-      padding: 5px 8px;
-      left: 0px;
-      text-align: center;
-
-    }
-
-    .sidebar p{
-      text-align: center;
-      font: bold 15px Comfortaa ;
-
-    }
-
-  </style>
 </head>
 <body>
 
@@ -90,41 +26,13 @@
     <!--Side interactive bar -->
     <div class = "sidebar" id = "sbar">
       <p>Where do you want to go?</p>
-      <input id="search_input" class = "interact" type="text" placeholder="Search Box">
+      <input id="pac-input" class = "interact" type="text" placeholder="Search Box">
     </div>
 
     <!--Map-->
-    <div class = "map" id="map"></div><!Map section of the UI>
+    <div class = "map" id="map"></div><!--Map section of the UI-->
   </div>
-  <script>
-    var map;
-    function initAutocomplete() {
-      map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 41.3851, lng: 2.1734},
-        zoom: 14,
-        styles: [
-          {
-            featureType: "poi",
-            stylers: [
-              { visibility: "off" }
-            ]
-          }
-        ]
-      });
-    }
 
-    var input = document.getElementById('search_input');
-
-    var searchBox = new google.maps.places.SearchBox(input);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-    map.addListener('bounds_changed', function() {
-      searchBox.setBounds(map.getBounds());
-    });
-
-
-
-
-  </script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFq9B3920UjRlpxJOBqSm720kIa7qkjAM&libraries=places&callback=initAutocomplete"
           type="text/javascript"></script>
 </body>
