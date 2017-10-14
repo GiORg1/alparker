@@ -1,19 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Node Sample App</title>
-
-    <!-- CSS -->
-    <!-- load bootstrap and our own personal stylesheet -->
-    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/superhero/bootstrap.min.css" rel="stylesheet">
+  <title>AlParca</title>
+  <meta name="viewport" content="initial-scale=1.0">
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="styles/main.css">
+  <script type="text/javascript" src = "scripts/main.js"></script>
+  <script s_src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 
 </head>
 <body>
 
-    <h1>This Is Heroku Awesome!</h1>
-    <p>This is the sample of a tutorial on <a href="https://scotch.io">scotch.io</a></p>
-    <a href="https://scotch.io/tutorials/" class="btn btn-primary btn-lg">View the Tutorial</a>
+  <!--Top Menu -->
+  <div class = "topnav" id = "navbar">
+    <ul>
+      <a href="index.html">AlParker</a>
+      <a href="news.asp">About Us</a>
+      <a href="contact.asp">Contact</a>
+      <a href="about.asp">Support Us</a>
+    </ul>
+  </div>
+
+  <!--Main body -->
+  <div class="mainbody" id="mainbody" style="height:100%; width:100%;">
+    <input id="pac-input" class = "interact" type="text" placeholder="Destination">
+    <!--Map-->
+    <div class = "map" id="map">
+    </div>
+  </div>
+
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFq9B3920UjRlpxJOBqSm720kIa7qkjAM&libraries=places&callback=initAutocomplete"
+          type="text/javascript"></script>
 
 </body>
 </html>
+
