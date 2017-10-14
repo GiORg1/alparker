@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="styles/main.css">
   <script type="text/javascript" src = "scripts/main.js"></script>
+  <script s_src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 
 </head>
 <body>
@@ -22,18 +23,14 @@
 
   <!--Main body -->
   <div class="mainbody" id="mainbody" style="height:100%; width:100%;">
-
-    <!--Side interactive bar -->
-    <div class = "sidebar" id = "sbar">
-      <p>Where do you want to go?</p>
-      <input id="pac-input" class = "interact" type="text" placeholder="Search Box">
-    </div>
-
+    <input id="pac-input" class = "interact" type="text" placeholder="Destination">
     <!--Map-->
-    <div class = "map" id="map"></div><!--Map section of the UI-->
+    <div class = "map" id="map">
+    </div>
   </div>
 
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFq9B3920UjRlpxJOBqSm720kIa7qkjAM&libraries=places&callback=initAutocomplete"
           type="text/javascript"></script>
+
 </body>
 </html>
