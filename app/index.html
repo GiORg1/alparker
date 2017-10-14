@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Simple Map</title>
+  <title>AlParker</title>
   <meta name="viewport" content="initial-scale=1.0">
   <meta charset="utf-8">
   <style>
@@ -14,6 +14,8 @@
       margin: 0;
       padding: 0%;
     }
+
+    /*Nav menu CSS*/
     .topnav {
       background-color: #f7f7f5;
       overflow: hidden;
@@ -25,8 +27,7 @@
       text-align: center;
       padding: 14px 16px;
       text-decoration: none;
-      font-size: 15px;
-      font-family: "Bitstream Vera Serif", Serif;
+      font: bold 15px Comfortaa ;
       color: #778899;
     }
     .topnav a:hover {
@@ -39,6 +40,8 @@
       color: white;
     }
 
+    /*Main body CSS*/
+
     #mainbody {
       position: relative;
       height: 100%;
@@ -46,51 +49,75 @@
 
     #map {
       height: 90%;
-      width: 70%;
+      width: 85%;
       position: relative;
-      right: 0px;
+      float:right;
     }
-    #sidebar{
+
+    .sidebar{
       position: relative;
-      width: auto;
+      float:left;
+      width: 14%;
+      padding: 5px 8px;
       left: 0px;
+      text-align: center;
+
+    }
+
+    .sidebar p{
+      text-align: center;
+      font: bold 15px Comfortaa ;
+
     }
 
   </style>
 </head>
 <body>
-<div class = "topnav" id = "navbar">
-  <ul>
-    <a href="index.html">AlParker</a>
-    <a href="news.asp">About Us</a>
-    <a href="contact.asp">Contact</a>
-    <a href="about.asp">Support Us</a>
-  </ul>
-</div>
 
-<div class="mainbody" id="mainbody" style="height:100%; width:100%;">
-  <h3>Test</h3>
-  <div class = "sidebar" id = "sidebar"><p>Testing </p></div>
-  <div class = "map" id="map"></div><!Map section of the UI>
-</div>
-<script>
-  var map;
-  function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: 41.3851, lng: 2.1734},
-      zoom: 14,
-      styles: [
-       {
-         featureType: "poi",
-         stylers: [
-          { visibility: "off" }
-         ]   
-        }
-      ]
+  <!--Top Menu -->
+  <div class = "topnav" id = "navbar">
+    <ul>
+      <a href="index.html">AlParker</a>
+      <a href="news.asp">About Us</a>
+      <a href="contact.asp">Contact</a>
+      <a href="about.asp">Support Us</a>
+    </ul>
+  </div>
+
+  <!--Main body -->
+  <div class="mainbody" id="mainbody" style="height:100%; width:100%;">
+
+    <!--Side interactive bar -->
+    <div class = "sidebar" id = "sbar">
+      <p>Where do you want to go?</p>
+      <input id="search_input" class = "interact" type="text" placeholder="Search Box">
+    </div>
+
+    <!--Map-->
+    <div class = "map" id="map"></div><!Map section of the UI>
+  </div>
+  <script>
+    var map;
+    function initAutocomplete() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 41.3851, lng: 2.1734},
+        zoom: 14
+      });
+    }
+
+    var input = document.getElementById('search_input');
+
+    var searchBox = new google.maps.places.SearchBox(input);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    map.addListener('bounds_changed', function() {
+      searchBox.setBounds(map.getBounds());
     });
-  }
-</script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFq9B3920UjRlpxJOBqSm720kIa7qkjAM&callback=initMap"
-        type="text/javascript"></script>
+
+
+
+
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFq9B3920UjRlpxJOBqSm720kIa7qkjAM&libraries=places&callback=initAutocomplete"
+          type="text/javascript"></script>
 </body>
 </html>
