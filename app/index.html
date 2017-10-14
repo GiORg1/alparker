@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Map</title>
+  <meta name="viewport" content="initial-scale=1.0">
+  <meta charset="utf-8">
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+
+    /* Optional: Makes the sample page fill the window. */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0%;
+    }
+    .topnav {
+      background-color: #f7f7f5;
+      overflow: hidden;
+
+    }
+    .topnav a {
+      float: left;
+      display: block;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 15px;
+      font-family: "Bitstream Vera Serif", Serif;
+      color: #778899;
+    }
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    .topnav a:active {
+      background-color: #a29686;
+      color: white;
+    }
+
+    #mainbody {
+      position: relative;
+      height: 100%;
+    }
+
+    #map {
+      height: 90%;
+      width: 70%;
+      position: relative;
+      right: 0px;
+    }
+    #sidebar{
+      position: relative;
+      width: auto;
+      left: 0px;
+    }
+
+  </style>
+</head>
+<body>
+<div class = "topnav" id = "navbar">
+  <ul>
+    <a href="index.html">AlParker</a>
+    <a href="news.asp">About Us</a>
+    <a href="contact.asp">Contact</a>
+    <a href="about.asp">Support Us</a>
+  </ul>
+</div>
+
+<div class="mainbody" id="mainbody" style="height:100%; width:100%;">
+  <h3>Test</h3>
+  <div class = "sidebar" id = "sidebar"><p>Testing </p></div>
+  <div class = "map" id="map"></div><!Map section of the UI>
+</div>
+<script>
+  var map;
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 41.3851, lng: 2.1734},
+      zoom: 14
+    });
+  }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFq9B3920UjRlpxJOBqSm720kIa7qkjAM&callback=initMap"
+        type="text/javascript"></script>
+</body>
+</html>
