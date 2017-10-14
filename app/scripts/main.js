@@ -26,6 +26,8 @@ function initAutocomplete() {
 
   });
 
+  //code for creation and movement of cars
+
   var cars = []; 
  
   var directionsService = new google.maps.DirectionsService(); 
@@ -39,11 +41,7 @@ function initAutocomplete() {
       map: map 
     }); 
     car.path = []; 
-    car.assignTime = 0; 
-    car.fakeJamsChecked = 0; 
-    car.jamsChecked = 0; 
     car.startPosition = car.position; 
-    car.jams = []; 
     car.waypoints = []; 
     car.totalDistance = 0; 
     car.pointOnPath = 0; 
@@ -102,6 +100,21 @@ function initAutocomplete() {
     car.pointOnPath++; 
     if(car.pointOnPath<car.path.length){ 
       moveCar(car, car.path[car.pointOnPath]); 
+    }else{
+      car.pointOnPath = 0; 
+
+      car.target = randomPoint(new google.maps.LatLng(41.390593, 2.169290), new google.maps.LatLng(41.389997, 2.161394));
+      directionsService.route({ 
+          origin:car.getPosition(), 
+          destination:car.target, 
+          travelMode: google.maps.TravelMode.DRIVING 
+        }, function(result, status) { 
+          if (status == google.maps.DirectionsStatus.OK) { 
+            car.path = result.routes[0].overview_path; 
+            car.pointOnPath = 0; 
+          } 
+        } 
+      ); 
     }         
   } 
 
@@ -119,6 +132,8 @@ function initAutocomplete() {
   map.addListener('bounds_changed', function() {
     searchBox.setBounds(map.getBounds());
   });
+
+
   var markers = [];
   searchBox.addListener('places_changed', function() {
 
