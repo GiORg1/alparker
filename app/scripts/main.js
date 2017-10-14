@@ -45,20 +45,6 @@ function initAutocomplete() {
     car.waypoints = []; 
     car.totalDistance = 0; 
     car.pointOnPath = 0; 
-
-    car.target = new google.maps.LatLng(41.390673, 2.165964); 
-    directionsService.route({ 
-        origin:car.getPosition(), 
-        destination:new google.maps.LatLng(41.390673, 2.165964), 
-        travelMode: google.maps.TravelMode.DRIVING 
-      }, function(result, status) { 
-        if (status == google.maps.DirectionsStatus.OK) { 
-          car.path = result.routes[0].overview_path; 
-          car.pointOnPath = 0; 
-        } 
-      } 
-    ); 
-
     cars.push(car); 
 
   } 
@@ -73,12 +59,14 @@ function initAutocomplete() {
   } 
 
   //Place cars at random position in latlng range and drive them to location 
-  var car_number = 2; 
+  var car_number = 1; 
+  //this is our box we get data from - cars will be rendered inside and will also drive inside
+  var limiting_coordinates = [new google.maps.LatLng(41.391603, 2.145333), new google.maps.LatLng(41.387482, 2.157242)]
   for(var i = 0; i<car_number; i++){ 
-      var rPoint = randomPoint(new google.maps.LatLng(41.390593, 2.169290), new google.maps.LatLng(41.389997, 2.161394)); 
+      var rPoint = randomPoint(limiting_coordinates[0], limiting_coordinates[1]); 
       directionsService.route({ 
       origin:rPoint, 
-      destination:new google.maps.LatLng(41.390673, 2.165964), 
+      destination: randomPoint(limiting_coordinates[0], limiting_coordinates[1]), 
       travelMode: google.maps.TravelMode.DRIVING 
     }, function(result, status) { 
       if (status == google.maps.DirectionsStatus.OK) { 
@@ -96,14 +84,26 @@ function initAutocomplete() {
   } 
 
   //Moves a car along its path at the correct speed 
-  function advance(car){ 
-    car.pointOnPath++; 
+  function advance(car){  
     if(car.pointOnPath<car.path.length){ 
-      moveCar(car, car.path[car.pointOnPath]); 
+      if(car.midpoint){
+        if(car.pointOnPath<(car.path.length-1)){
+          moveCar(car, new google.maps.LatLng(
+            (car.path[car.pointOnPath].lat() + car.path[(car.pointOnPath+1)].lat())/2,
+            (car.path[car.pointOnPath].lng() + car.path[(car.pointOnPath+1)].lng())/2
+          ));
+        }
+        car.midpoint = false;
+        car.pointOnPath++;
+      }else{
+        car.midpoint = true;
+        moveCar(car, car.path[car.pointOnPath]); 
+      }
+      
     }else{
-      car.pointOnPath = 0; 
+      car.midpoint = false;
 
-      car.target = randomPoint(new google.maps.LatLng(41.390593, 2.169290), new google.maps.LatLng(41.389997, 2.161394));
+      car.target = randomPoint(limiting_coordinates[0], limiting_coordinates[1]);
       directionsService.route({ 
           origin:car.getPosition(), 
           destination:car.target, 
@@ -114,7 +114,7 @@ function initAutocomplete() {
             car.pointOnPath = 0; 
           } 
         } 
-      ); 
+      );
     }         
   } 
 
@@ -123,7 +123,7 @@ function initAutocomplete() {
       for(var f = 0; f<car_number;f++){ 
         advance(cars[f]); 
       } 
-    }, 1000); 
+    }, 1500); 
   }, 2000);   
   var input = document.getElementById('pac-input');
   var searchBox = new google.maps.places.SearchBox(input);
