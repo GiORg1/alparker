@@ -53,9 +53,28 @@ app.use('/real_cars', function (req, res, next) {
 	Car.find(function (err, real_cars) {
 		if(err) res.send(err);
 		res.json(real_cars);
+
+		var myStringArray = real_cars;
+		var arrayLength = myStringArray.length;
+		var formated = [];
+		for (var i = 0; i < arrayLength; i++) {
+			formated.push(JSON.stringify({
+			  type: "Feature",
+			  geometry: {
+			    type: "Point",
+			    coordinates: [myStringArray[i].llg["lat"], myStringArray[i].llg["lng"]]
+			  },
+			  properties: {
+			    sns: myStringArray[i].sns,
+			    ang: myStringArray[i].ang,
+			  }
+			}));
+		    //Do something
+		}
+
+		console.log(formated);
+
 	});
-
-
 
 });
 
