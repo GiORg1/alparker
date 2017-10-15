@@ -1091,7 +1091,7 @@ function initAutocomplete() {
   }
 
   //Place cars at random position in latlng range and drive them to location
-  var car_number = 1;
+  var car_number = 3;
   //this is our box we get data from - cars will be rendered inside and will also drive inside
   var limiting_coordinates = [new google.maps.LatLng(41.391603, 2.145333), new google.maps.LatLng(41.387482, 2.157242)]
   for (var i = 0; i < car_number; i++) {
@@ -1395,8 +1395,11 @@ function initAutocomplete() {
 
     timerDyna = setInterval(function(){
       updateShown();
-      mcQueryRes = circleQuery(cars[0].position, 50);
-      addShown(mcQueryRes);
+      num_cars = cars.length;
+      for(var i = 0; i < num_cars; i++){
+        mcQueryRes = circleQuery(cars[i].position, 50);
+        addShown(mcQueryRes);
+      }      
     }, 2000);
 
 
