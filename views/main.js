@@ -152,10 +152,7 @@ function initAutocomplete() {
 
     // Setup the click event listeners: simply set the map to Chicago.
     controlUI.addEventListener('click', function () {
-      console.log("Hello world!");
-      console.log(markers);
-      window.alert(markers[markers.length - 1].position);
-    });
+
   };
 
   var input = document.getElementById('pac-input');
@@ -236,6 +233,7 @@ function initAutocomplete() {
       position: location,
       map: map,
     }));
+    console.log("lat:"+Number(location.lat())+",lng:"+Number(location.lng()) );
   }
 
   function clearLocations() { //Clears out all marker data from array 'markers'
@@ -245,6 +243,72 @@ function initAutocomplete() {
       markers[i].setMap(null);
     }
     markers.length = 0;
+  }
+  function clearMarks(carMarkers) { //Clears out all marker data from array 'pCarMarkers'
+    info_Window = new google.maps.InfoWindow();
+    info_Window.close();
+    for (var i = 0; i < carMarkers.length; i++) {
+      carMarkers[i].setMap(null);
+    }
+    carMarkers.length = 0;
+  }
+
+  var sdQueryRes = []; //equate it to result of circle query
+  var mcQueryRes = []; //equate it to result of circle query
+  var sdCarMarkers = []; //for static destination coordinate query
+  var mCarMarkers = [];
+  var sdCars = [];
+  var mCars = []; //for moving car coordinate query
+
+  /* Timer
+
+  timerDyna = setInterval(function(){
+    clearMarks(mCarMarkers);
+    mcQueryRes = circleQuery(cars[0].position, 50);
+    pushCars(mcQueryRes, mCars);
+    drawCars(mCarMarkers, mCars);
+  }, 3000);
+
+
+  timerStat = setInterval(function(){
+    clearMarks(sdCarMarkers);
+    sdQueryRes = circleQuery(markers[0].position, 200);
+    pushCars(sdQueryRes, sdCars);
+    drawCars(sdCarMarkers, sdCars);
+  }, 10000);
+
+   */
+
+  /* Example of pushing query result into an array of parkedV objects
+  var parkedCars = [];
+  for(var i = 0; i<449;i++){
+    parkedCars.push(new parkedV(cvarr[i].llg,cvarr[i].sns,cvarr[i].ang));
+  }
+  */
+
+
+
+  ///////////////////////////////////////////////////////////////////////////////
+
+  function drawCars(parkedCarMarkers, carArray) {
+    for (var i = 0; i < carArray.length; i++) {
+      var iconu = symbols[carArray[i].sns];
+      iconu.rotation = carArray[i].ang;
+
+      parkedCarMarkers.push(new google.maps.Marker({
+        position: carArray[i].llg,
+        map: map,
+        icon: iconu
+      }));
+
+      console.log("Pushed");
+    }
+  }
+
+  function pushCars(queryRes, carMarkers){
+    for(var i = 0; i < queryRes.length; i++){
+      carMarkers.push(new parkedV(queryRes[i].llg, queryRes[i].sns, queryRes[i].ang));
+    }
   }
 
 }
