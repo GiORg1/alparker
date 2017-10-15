@@ -1350,8 +1350,7 @@ function initAutocomplete() {
           var result = shown_markers.filter(function( obj ) {
             return obj.position == x.llg;
           });
-          console.log(result);
-          result.setOpacity(1.);
+          // problem result.setOpacity(1);
         }else{
           shown_cars.push(x);
 
@@ -1361,7 +1360,8 @@ function initAutocomplete() {
           shown_markers.push(new google.maps.Marker({
             position: x.llg,
             map: map,
-            icon: iconu
+            icon: iconu,
+            opacity: 1
           }));
         }
       });
