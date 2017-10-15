@@ -1,13 +1,46 @@
+function parkedV(llg, sns, ang){
+  this.llg = llg;
+  this.sns = sns;
+  this.ang = ang;
+}
+
+var symbol1 = {
+  path: 'M -3,6 3,6 3,-6 -3,-6 z',
+  strokeColor: '#F00',
+  fillColor: '#F00',
+  fillOpacity: 1,
+  rotation: 0
+};
+
+var symbol2 = {
+  path: 'M -3,6 3,6 3,-6 -3,-6 z',
+  strokeColor: '#ffee00',
+  fillColor: '#ffee00',
+  fillOpacity: 1,
+  rotation: 0
+};
+
+var symbol3 = {
+  path: 'M -3,6 3,6 3,-6 -3,-6 z',
+  strokeColor: '#0dac31',
+  fillColor: '#0dac31',
+  fillOpacity: 1,
+  rotation: 0
+};
+
+var symbols = [symbol1, symbol2, symbol3];
+
+
 function initAutocomplete() {
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 41.3851, lng: 2.1734},
     zoom: 14,
-    mapTypeId:'roadmap',
+    mapTypeId: 'roadmap',
     styles: [
       {
         featureType: "poi",
         stylers: [
-          { visibility: "off" }
+          {visibility: "off"}
         ]
       }
     ],
@@ -31,7 +64,7 @@ function initAutocomplete() {
   var directionsService = new google.maps.DirectionsService();
 
   //Places a car at position
-  function placeCar(position){
+  function placeCar(position) {
     var car = new google.maps.Marker({
       position: position,
       icon: './images/caricon.png',
@@ -48,7 +81,7 @@ function initAutocomplete() {
   }
 
   //Returns a random point within the area defined bottomLeft and topRight
-  function randomPoint(bottomLeft, topRight){
+  function randomPoint(bottomLeft, topRight) {
     var latDiff = topRight.lat() - bottomLeft.lat();
     var lngDiff = topRight.lng() - bottomLeft.lng();
     var newLat = bottomLeft.lat() + Math.random() * latDiff;
@@ -60,16 +93,16 @@ function initAutocomplete() {
   var car_number = 1;
   //this is our box we get data from - cars will be rendered inside and will also drive inside
   var limiting_coordinates = [new google.maps.LatLng(41.391603, 2.145333), new google.maps.LatLng(41.387482, 2.157242)]
-  for(var i = 0; i<car_number; i++){
-      var rPoint = randomPoint(limiting_coordinates[0], limiting_coordinates[1]);
-      directionsService.route({
-      origin:rPoint,
+  for (var i = 0; i < car_number; i++) {
+    var rPoint = randomPoint(limiting_coordinates[0], limiting_coordinates[1]);
+    directionsService.route({
+      origin: rPoint,
       destination: randomPoint(limiting_coordinates[0], limiting_coordinates[1]),
       travelMode: google.maps.TravelMode.DRIVING
-    }, function(result, status) {
+    }, function (result, status) {
       if (status == google.maps.DirectionsStatus.OK) {
         placeCar(new google.maps.LatLng(result.routes[0].legs[0].start_location.lat(), result.routes[0].legs[0].start_location.lng()));
-      }else{
+      } else {
         alert("Error: Google Maps API not returning location data. The app will restart.");
         window.location = "./";
       }
@@ -77,36 +110,36 @@ function initAutocomplete() {
   }
 
   //Relocates car to position
-  function moveCar(car, position){
+  function moveCar(car, position) {
     car.setPosition(position);
   }
 
   //Moves a car along its path at the correct speed
-  function advance(car){
-    if(car.pointOnPath<car.path.length){
-      if(car.midpoint){
-        if(car.pointOnPath<(car.path.length-1)){
+  function advance(car) {
+    if (car.pointOnPath < car.path.length) {
+      if (car.midpoint) {
+        if (car.pointOnPath < (car.path.length - 1)) {
           moveCar(car, new google.maps.LatLng(
-            (car.path[car.pointOnPath].lat() + car.path[(car.pointOnPath+1)].lat())/2,
-            (car.path[car.pointOnPath].lng() + car.path[(car.pointOnPath+1)].lng())/2
+            (car.path[car.pointOnPath].lat() + car.path[(car.pointOnPath + 1)].lat()) / 2,
+            (car.path[car.pointOnPath].lng() + car.path[(car.pointOnPath + 1)].lng()) / 2
           ));
         }
         car.midpoint = false;
         car.pointOnPath++;
-      }else{
+      } else {
         car.midpoint = true;
         moveCar(car, car.path[car.pointOnPath]);
       }
 
-    }else{
+    } else {
       car.midpoint = false;
 
       car.target = randomPoint(limiting_coordinates[0], limiting_coordinates[1]);
       directionsService.route({
-          origin:car.getPosition(),
-          destination:car.target,
+          origin: car.getPosition(),
+          destination: car.target,
           travelMode: google.maps.TravelMode.DRIVING
-        }, function(result, status) {
+        }, function (result, status) {
           if (status == google.maps.DirectionsStatus.OK) {
             car.path = result.routes[0].overview_path;
             car.pointOnPath = 0;
@@ -116,13 +149,14 @@ function initAutocomplete() {
     }
   }
 
-  setTimeout(function() {
-    timer = setInterval(function(){
-      for(var f = 0; f<car_number;f++){
+  setTimeout(function () {
+    timer = setInterval(function () {
+      for (var f = 0; f < car_number; f++) {
         advance(cars[f]);
       }
     }, 1500);
   }, 2000);
+
   //Car Part done by Adam
 
   function CenterControl(controlDiv, map) {
@@ -153,162 +187,164 @@ function initAutocomplete() {
     // Setup the click event listeners: simply set the map to Chicago.
     controlUI.addEventListener('click', function () {
 
-  };
+    });
+  }
 
-  var input = document.getElementById('pac-input');
-  var searchBox = new google.maps.places.SearchBox(input);
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input); //comment this out to move the search box anywhere
-  var centerControlDiv = document.createElement('div');
-  var centerControl = new CenterControl(centerControlDiv, map);
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+    var input = document.getElementById('pac-input');
+    var searchBox = new google.maps.places.SearchBox(input);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input); //comment this out to move the search box anywhere
+    var centerControlDiv = document.createElement('div');
+    var centerControl = new CenterControl(centerControlDiv, map);
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
 
-  map.addListener('bounds_changed', function() {
-    searchBox.setBounds(map.getBounds());
-  });
-
-
-  var markers = [];
-  searchBox.addListener('places_changed', function() {
-
-    clearLocations();
-    var places = searchBox.getPlaces();
+    map.addListener('bounds_changed', function () {
+      searchBox.setBounds(map.getBounds());
+    });
 
 
-    if (places.length == 0) {
-      return;
-    }
+    var markers = [];
+    searchBox.addListener('places_changed', function () {
 
-    // Clear out the old markers.
+      clearLocations();
+      var places = searchBox.getPlaces();
 
-    clearLocations();
 
-    markers = [];
-
-    // For each place, get the icon, name and location.
-    var bounds = new google.maps.LatLngBounds();
-    places.forEach(function(place) {
-      if (!place.geometry) {
-        console.log("Returned place contains no geometry");
+      if (places.length == 0) {
         return;
       }
-      var icon = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25)
-      };
 
-      // Create a marker for each place.
-      markers.push(new google.maps.Marker({
-        map: map,
-        icon: icon,
-        title: place.name,
-        position: place.geometry.location
+      // Clear out the old markers.
 
-      }));
+      clearLocations();
 
-      window.alert(markers[0].position);
+      markers = [];
+
+      // For each place, get the icon, name and location.
+      var bounds = new google.maps.LatLngBounds();
+      places.forEach(function (place) {
+        if (!place.geometry) {
+          console.log("Returned place contains no geometry");
+          return;
+        }
+        var icon = {
+          url: place.icon,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(25, 25)
+        };
+
+        // Create a marker for each place.
+        markers.push(new google.maps.Marker({
+          map: map,
+          icon: icon,
+          title: place.name,
+          position: place.geometry.location
+
+        }));
+
+        window.alert(markers[0].position);
 
 
-      if (place.geometry.viewport) {
-        // Only geocodes have viewport.
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
-      }
+        if (place.geometry.viewport) {
+          // Only geocodes have viewport.
+          bounds.union(place.geometry.viewport);
+        } else {
+          bounds.extend(place.geometry.location);
+        }
+      });
+      map.fitBounds(bounds);
     });
-    map.fitBounds(bounds);
-  });
 
-  map.addListener('click', function(event) {
-    clearLocations();
+    map.addListener('click', function (event) {
+      clearLocations();
 
-    placeMarker(event.latLng);
+      placeMarker(event.latLng);
 
-  });
+    });
 
-  function placeMarker(location) {
-    markers.push( new google.maps.Marker({
-      position: location,
-      map: map,
-    }));
-    console.log("lat:"+Number(location.lat())+",lng:"+Number(location.lng()) );
-  }
-
-  function clearLocations() { //Clears out all marker data from array 'markers'
-    info_Window = new google.maps.InfoWindow();
-    info_Window.close();
-    for (var i = 0; i < markers.length; i++) {
-      markers[i].setMap(null);
-    }
-    markers.length = 0;
-  }
-  function clearMarks(carMarkers) { //Clears out all marker data from array 'pCarMarkers'
-    info_Window = new google.maps.InfoWindow();
-    info_Window.close();
-    for (var i = 0; i < carMarkers.length; i++) {
-      carMarkers[i].setMap(null);
-    }
-    carMarkers.length = 0;
-  }
-
-  var sdQueryRes = []; //equate it to result of circle query
-  var mcQueryRes = []; //equate it to result of circle query
-  var sdCarMarkers = []; //for static destination coordinate query
-  var mCarMarkers = [];
-  var sdCars = [];
-  var mCars = []; //for moving car coordinate query
-
-  /* Timer
-
-  timerDyna = setInterval(function(){
-    clearMarks(mCarMarkers);
-    mcQueryRes = circleQuery(cars[0].position, 50);
-    pushCars(mcQueryRes, mCars);
-    drawCars(mCarMarkers, mCars);
-  }, 3000);
-
-
-  timerStat = setInterval(function(){
-    clearMarks(sdCarMarkers);
-    sdQueryRes = circleQuery(markers[0].position, 200);
-    pushCars(sdQueryRes, sdCars);
-    drawCars(sdCarMarkers, sdCars);
-  }, 10000);
-
-   */
-
-  /* Example of pushing query result into an array of parkedV objects
-  var parkedCars = [];
-  for(var i = 0; i<449;i++){
-    parkedCars.push(new parkedV(cvarr[i].llg,cvarr[i].sns,cvarr[i].ang));
-  }
-  */
-
-
-
-  ///////////////////////////////////////////////////////////////////////////////
-
-  function drawCars(parkedCarMarkers, carArray) {
-    for (var i = 0; i < carArray.length; i++) {
-      var iconu = symbols[carArray[i].sns];
-      iconu.rotation = carArray[i].ang;
-
-      parkedCarMarkers.push(new google.maps.Marker({
-        position: carArray[i].llg,
+    function placeMarker(location) {
+      markers.push(new google.maps.Marker({
+        position: location,
         map: map,
-        icon: iconu
       }));
-
-      console.log("Pushed");
+      console.log("lat:" + Number(location.lat()) + ",lng:" + Number(location.lng()));
     }
-  }
 
-  function pushCars(queryRes, carMarkers){
-    for(var i = 0; i < queryRes.length; i++){
-      carMarkers.push(new parkedV(queryRes[i].llg, queryRes[i].sns, queryRes[i].ang));
+    function clearLocations() { //Clears out all marker data from array 'markers'
+      info_Window = new google.maps.InfoWindow();
+      info_Window.close();
+      for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+      }
+      markers.length = 0;
     }
-  }
+
+    function clearMarks(carMarkers) { //Clears out all marker data from array 'pCarMarkers'
+      info_Window = new google.maps.InfoWindow();
+      info_Window.close();
+      for (var i = 0; i < carMarkers.length; i++) {
+        carMarkers[i].setMap(null);
+      }
+      carMarkers.length = 0;
+    }
+
+    var sdQueryRes = []; //equate it to result of circle query
+    var mcQueryRes = []; //equate it to result of circle query
+    var sdCarMarkers = []; //for static destination coordinate query
+    var mCarMarkers = [];
+    var sdCars = [];
+    var mCars = []; //for moving car coordinate query
+
+    /* Timer
+
+    timerDyna = setInterval(function(){
+      clearMarks(mCarMarkers);
+      mcQueryRes = circleQuery(cars[0].position, 50);
+      pushCars(mcQueryRes, mCars);
+      drawCars(mCarMarkers, mCars);
+    }, 3000);
+
+
+    timerStat = setInterval(function(){
+      clearMarks(sdCarMarkers);
+      sdQueryRes = circleQuery(markers[0].position, 200);
+      pushCars(sdQueryRes, sdCars);
+      drawCars(sdCarMarkers, sdCars);
+    }, 10000);
+
+     */
+
+    /* Example of pushing query result into an array of parkedV objects
+    var parkedCars = [];
+    for(var i = 0; i<449;i++){
+      parkedCars.push(new parkedV(cvarr[i].llg,cvarr[i].sns,cvarr[i].ang));
+    }
+    */
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    function drawCars(parkedCarMarkers, carArray) {
+      for (var i = 0; i < carArray.length; i++) {
+        var iconu = symbols[carArray[i].sns];
+        iconu.rotation = carArray[i].ang;
+
+        parkedCarMarkers.push(new google.maps.Marker({
+          position: carArray[i].llg,
+          map: map,
+          icon: iconu
+        }));
+
+        console.log("Pushed");
+      }
+    }
+
+    function pushCars(queryRes, carMarkers) {
+      for (var i = 0; i < queryRes.length; i++) {
+        carMarkers.push(new parkedV(queryRes[i].llg, queryRes[i].sns, queryRes[i].ang));
+      }
+    }
+
 
 }
