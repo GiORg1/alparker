@@ -1156,7 +1156,7 @@ function initAutocomplete() {
         advance(cars[f]);
       }
     }, 1500);
-  }, 2000);
+  }, 1000);
 
   //Car Part done by Adam
 
@@ -1291,12 +1291,8 @@ function initAutocomplete() {
     }
 
 
-    var sdQueryRes = []; //equate it to result of circle query
-    var mcQueryRes = []; //equate it to result of circle query
-    var sdCarMarkers = []; //for static destination coordinate query
-    var mCarMarkers = [];
-    var sdCars = [];
-    var mCars = []; //for moving car coordinate query
+    var shown_cars = [];
+    var shown_markers = [];
 
     //converting coordinates to distance in meters
     function toRad(n) {
@@ -1348,6 +1344,44 @@ function initAutocomplete() {
      return s.toFixed(3); // round to 1mm precision
     };
 
+    function addShown(nearby_cars){
+      nearby_cars.forEach(function(x){
+        if(shown_cars.includes(x)){
+          var result = shown_markers.filter(function( obj ) {
+            return obj.position == x.llg;
+          });
+          console.log(result);
+          result.setOpacity(1.);
+        }else{
+          shown_cars.push(x);
+
+          var iconu = symbols[x.sns];
+          iconu.rotation = x.ang;
+
+          shown_markers.push(new google.maps.Marker({
+            position: x.llg,
+            map: map,
+            icon: iconu
+          }));
+        }
+      });
+    }
+
+    function updateShown(){
+      shown_markers.forEach(function(x){
+        if(x.getOpacity()<0.2){
+          var result = shown_cars.filter(function( obj ) {
+            return obj.llg == x.position;
+          });
+          shown_cars.splice(shown_cars.indexOf(result), 1);
+          shown_markers.splice(shown_markers.indexOf(x), 1);
+          x.setMap(null);
+        }else{
+          x.setOpacity(x.getOpacity()-0.1);
+        }
+      });
+    }
+
     function circleQuery(center, radius){
       var arrayLength = points.length;
       var nearby = [];
@@ -1360,53 +1394,18 @@ function initAutocomplete() {
     }
 
     timerDyna = setInterval(function(){
-      clearMarks(mCarMarkers);
+      updateShown();
       mcQueryRes = circleQuery(cars[0].position, 50);
-      pushCars(mcQueryRes, mCars);
-      drawCars(mCarMarkers, mCars);
-    }, 1000);
+      addShown(mcQueryRes);
+    }, 2000);
 
 
     timerStat = setInterval(function(){
-      clearMarks(sdCarMarkers);
       if(markers.length > 0){
         console.log("there are some markers");
         sdQueryRes = circleQuery(markers[0].position, 200);
-        pushCars(sdQueryRes, sdCars);
-        drawCars(sdCarMarkers, sdCars);
+        addShown(sdQueryRes);
       }
     }, 5000);
-
-    /* Example of pushing query result into an array of parkedV objects
-    var parkedCars = [];
-    for(var i = 0; i<449;i++){
-      parkedCars.push(new parkedV(cvarr[i].llg,cvarr[i].sns,cvarr[i].ang));
-    }
-    */
-
-
-    ///////////////////////////////////////////////////////////////////////////////
-
-    function drawCars(parkedCarMarkers, carArray) {
-      for (var i = 0; i < carArray.length; i++) {
-        var iconu = symbols[carArray[i].sns];
-        iconu.rotation = carArray[i].ang;
-
-        parkedCarMarkers.push(new google.maps.Marker({
-          position: carArray[i].llg,
-          map: map,
-          icon: iconu
-        }));
-
-        console.log("Pushed");
-      }
-    }
-
-    function pushCars(queryRes, carMarkers) {
-      for (var i = 0; i < queryRes.length; i++) {
-        carMarkers.push(new parkedV(queryRes[i].llg, queryRes[i].sns, queryRes[i].ang));
-      }
-    }
-
 
 }
