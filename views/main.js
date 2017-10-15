@@ -1,3 +1,9 @@
+$(function(require) {
+    var databaseUrl = 'mongodb://parker:parker@ds119685.mlab.com:19685/elparker';
+    var collections = ["real_car"];
+    var db = require("mongojs").connect(databaseUrl, collections);
+});
+
 function initAutocomplete() {
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 41.3851, lng: 2.1734},
@@ -21,6 +27,22 @@ function initAutocomplete() {
       position: google.maps.ControlPosition.LEFT_CENTER
     },
   });
+
+  // Do something with db here, like inserting a record
+  db.collection('notes').insertOne(
+    {
+      title: 'Hello MongoDB',
+      text: 'Hopefully this works!'
+    },
+    function (err, res) {
+      if (err) {
+        db.close();
+        return console.log(err);
+      }
+      // Success
+      db.close();
+    }
+  )
 
 
   //Car Part done by Adam
